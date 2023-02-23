@@ -526,14 +526,14 @@
             params = new URLSearchParams(document.location.search);
             region = params.get("region");
             difficulty = params.get("slugcat");
-            if (region == null || difficulty == null) {
+            if (region == null || difficulty == null || difficulty == "cached") {
                 window.location.href = "index.html";
                 return;
             }
             modded = params.get("modded") == 'on' || region_order.indexOf(region) == -1;
             room = params.get("room");
             updateRegionList(modded);
-            loadRegion(region, modded);
+            loadRegion(difficulty, region, modded);
             selectDifficulty(difficulty);
             let foundRoom = false;
             if (room != null && roomsLayer != null) {
@@ -677,23 +677,23 @@
         var densLayer;
         var loadedRegion = null;
         var loadedModded = {};
-        function loadRegion(pregion, pmodded) {
+        function loadRegion(difficulty, pregion, pmodded) {
             if (loadedRegion == pregion && loadedModded == pmodded) return;
             region = pregion; // chaos
             modded = pmodded;
-            console.log("LOADING REGION " + region + " modded? " + modded);
-            var folderpath = 'tiles/' + (modded ? 'modded' : 'vanilla') + '/' + region + '/';
-            getJsonObject(folderpath + "region.json", function (json) {
+            console.log("Loading: region {" + region + "} on slugcat {" + difficulty + "}, modded {" + modded + "}");
+            getJsonObject(`tiles/${difficulty}/${region}/region.json`, function (json) {
                 // Background color
                 map.getContainer().style.backgroundColor = 'rgb(' + json["bgcolor"].join(',') + ')'; // I hate this with passion, but such is the way of the CSS
 
                 // Tileset layer
                 if (tileLayer != null) map.removeLayer(tileLayer);
-                tileLayer = L.tileLayer(folderpath + '{z}/{x}_{y}.png', {
+                tileLayer = L.tileLayer(`tiles/${difficulty}/${region}/{z}/{x}_{y}.png`, {
                     attribution: "<a href=\"https://store.steampowered.com/app/312520/Rain_World/\">Rain World</a> by <a href=\"https://twitter.com/VideocultMedia\">Videocult</a>",
                     minZoom: -7,
                     maxZoom: 3,
-                    maxNativeZoom: 0 // important, stop requesting tiles at this point
+                    maxNativeZoom: 0, // important, stop requesting tiles at this point
+                    errorTileUrl: `tiles/cached/${region}/{z}/{x}_{y}.png`, // files not in the slugcat's folder will probably be in the cache
                 }).addTo(map);
 
                 // Room features and name popups
