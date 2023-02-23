@@ -1,16 +1,18 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
 
     <meta charset="ISO-8859-1">
-    <title>Rain World Interactive Map</title>
+    <title>Rain World Map</title>
 
     <meta property="og:image" content="https://avatars0.githubusercontent.com/u/7621953?s=400&amp;v=4" />
     <meta property="og:site_name" content="GitHub" />
     <meta property="og:type" content="object" />
-    <meta property="og:title" content="Rain World Interactive Map" />
-    <meta property="og:url" content="https://henpemaz.github.io/Rain-World-Interactive-Map/index.html" />
-    <meta property="og:description" content="A Rain World interactive map using leaflet and GeoJSON data exported from the game files. - henpemaz/Rain-World-Interactive-Map" />
+    <meta property="og:title" content="Rain World Map" />
+    <meta property="og:url" content="https://rain-world-map.github.io" />
+    <meta property="og:description"
+        content="A Rain World interactive map using leaflet and GeoJSON data exported from the game files. - github.com/rain-world-map" />
 
     <link rel="stylesheet" href="./leaflet/leaflet.css" />
     <script src="./leaflet/leaflet.js"></script>
@@ -18,7 +20,8 @@
 
     <link rel="stylesheet" href="./rw.css" />
     <style id="mapstyle">
-        body, html {
+        body,
+        html {
             height: 100%;
             padding: 0;
             margin: 0;
@@ -47,7 +50,8 @@
         }
 
         .spawn-entry {
-            display: none; /* to be overwritten */
+            display: none;
+            /* to be overwritten */
             margin-left: 16px;
             margin-right: 16px;
         }
@@ -67,7 +71,8 @@
             font-weight: 900;
             font-size: 100%;
             color: white;
-            -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+            -webkit-text-fill-color: white;
+            /* Will override color (regardless of order) */
             -webkit-text-stroke-width: 1px;
             -webkit-text-stroke-color: black;
         }
@@ -120,10 +125,10 @@
         }
 
         #modded-ckb-group {
-            position:relative;
+            position: relative;
             top: 6px;
             padding-left: 6px;
-            margin-left:auto;
+            margin-left: auto;
         }
 
         #modded-ckb {
@@ -131,14 +136,15 @@
             width: 24px;
             height: 24px;
         }
-        #modded-ckb ~ label {
+
+        #modded-ckb~label {
             left: 4px;
             top: -6px;
         }
 
-            #modded-ckb::before {
-                font-size: 1rem;
-            }
+        #modded-ckb::before {
+            font-size: 1rem;
+        }
 
         .region-btn {
             font-size: 0.8rem;
@@ -148,8 +154,10 @@
             margin-top: 8px;
             margin-bottom: 8px;
         }
-        input[type='radio'].rw-ui + span {
-            top: calc(50% - 10px); /* proof that CSS is stupid, cant fucking vertical center text */
+
+        input[type='radio'].rw-ui+span {
+            top: calc(50% - 10px);
+            /* proof that CSS is stupid, cant fucking vertical center text */
         }
 
         #region-select {
@@ -167,18 +175,23 @@
     </style>
 
     <style id="spawnfilters">
-        .spawn-filter-0 { }
-        .spawn-filter-1 { }
-        .spawn-filter-2 { }
+        .spawn-filter-0 {}
+
+        .spawn-filter-1 {}
+
+        .spawn-filter-2 {}
+
     </style>
 
     <style id="hoverlabels">
         .hover-label {
             display: none;
         }
+
     </style>
 
 </head>
+
 <body>
     <div id="mapid"></div>
 
@@ -186,7 +199,8 @@
         <div style="padding-left: 8px; padding-bottom: 8px;">
             <span>Regions</span>
             <span id="modded-ckb-group">
-                <input type="checkbox" id="modded-ckb" name="modded" class="rw-ui rw-ui-ckb" autocomplete="off" onclick="updateRegionList(this.checked);" />
+                <input type="checkbox" id="modded-ckb" name="modded" class="rw-ui rw-ui-ckb" autocomplete="off"
+                    onclick="updateRegionList(this.checked);" />
                 <label for="modded-ckb" class="rw-text">Modded</label>
             </span>
         </div>
@@ -198,15 +212,18 @@
         <div>Difficulty</div>
         <form name="difficulty" class="difficulty-select">
             <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(0);" value=0 autocomplete="off">
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(0);" value=0
+                    autocomplete="off">
                 <img src="./resources/icons/17_slugcat.png">
             </label>
             <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(1);" value=1 autocomplete="off">
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(1);" value=1
+                    autocomplete="off">
                 <img src="./resources/icons/65_monk.png">
             </label>
             <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(2);" value=2 autocomplete="off">
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(2);" value=2
+                    autocomplete="off">
                 <img src="./resources/icons/64_hunter.png">
             </label>
         </form>
@@ -436,10 +453,10 @@
         if ('pushState' in window.history) {
             dynamicNavigation = true;
         }
-        
+
         (function (w) {
             w.URLSearchParams = w.URLSearchParams || function (searchString) {
-            //w.URLSearchParamsAlt = function (searchString) {
+                //w.URLSearchParamsAlt = function (searchString) {
                 var self = this;
                 self.searchString = searchString;
                 self.values = {};
@@ -452,7 +469,7 @@
                 // todo valueless
                 self.get = function (name) { return self.values[name]; };
                 self.set = function (name, value) { self.values[name] = value; };
-                self.delete = function (name ) { delete self.values[name]; };
+                self.delete = function (name) { delete self.values[name]; };
                 self.toString = function () {
                     let str;
                     for (var name in self.values) {
@@ -478,7 +495,7 @@
                 params.set("region", region);
                 changes = true;
             }
-            if (modded != (params.get("modded") == 'on' || region_order.indexOf(region) == -1 )) {
+            if (modded != (params.get("modded") == 'on' || region_order.indexOf(region) == -1)) {
                 if (modded) params.set("modded", "on");
                 else params.delete("modded");
                 changes = true;
@@ -822,4 +839,5 @@
 
     </script>
 </body>
+
 </html>
