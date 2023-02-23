@@ -124,60 +124,55 @@
             height: 36px;
         }
 
+        .difficulty-select {
+            padding-bottom: 6px;
+        }
+
+        .difficulty-btn {
+            display: inline-block;
+            width: 38px;
+            height: 38px;
+            margin: 4px;
+            position: relative;
+        }
+
     </style>
 
 </head>
 
 <body>
-    <form id="main-menu" action="map.html" method="get">
+    <form id="main-menu">
         <div class="rw-title">Rain World</div>
-        <div class="rw-bigtext" style="text-align: center; margin-top:0.5em;">I'm lost in...</div>
+        <div class="rw-bigtext" style="text-align: center; margin-top:0.5em;">I'm lost as...</div>
         <div id="regionlist-group">
             <div id="regionlist-vanilla"></div>
-            <div id="regionlist-modded" class="rl-hidden"></div>
         </div>
-        <div id="modded-ckb-group"><input type="checkbox" id="modded-ckb" name="modded" class="rw-ui rw-ui-ckb"
-                autocomplete="off" /><label for="modded-ckb" class="rw-text">Modded</label></div>
         <script>
-            var region_order = ['SU', 'HI', 'DS', 'CC', 'GW', 'SH', 'SL', 'SI', 'LF', 'UW', 'SS', 'SB'];
-            // dumped region dicts from running the generateGeoJSON scripts
-            var regions = { "CC": "Chimney Canopy", "DS": "Drainage System", "GW": "Garbage Wastes", "HI": "Industrial Complex", "LF": "Farm Arrays", "SB": "Subterranean", "SH": "Shaded Citadel", "SI": "Sky Islands", "SL": "Shoreline", "SS": "Five Pebbles", "SU": "Outskirts", "UW": "The Exterior" };
-            var modded_regions = { "AB": "Arid Barrens", "AR": "Aether Ridge", "BL": "Badlands", "CC": "Chimney Canopy", "CG": "Concealed Garden", "DS": "Drainage System", "DW": "Deserted Wastelands", "FB": "Forgotten Boiler", "FI": "Floating Isles", "GW": "Garbage Wastes", "HI": "Industrial Complex", "HW": "Moonlit Acres", "LF": "Farm Arrays", "LW": "Lush Mire", "RW": "Side House", "SB": "Subterranean", "SH": "Shaded Citadel", "SI": "Sky Islands", "SL": "Shoreline", "SS": "Five Pebbles", "SU": "Outskirts", "SW": "Swamplands", "TM": "The Mast", "TR": "The Root", "UB": "Underbelly", "US": "Undersea", "UW": "The Exterior" };
+            var slugcat_icons = ["17_slugcat", "65_monk", "64_hunter", "67_gourmand", "68_artificer", "69_rivulet", "70_spear", "71_saint"];
             var html = "";
             // vanilla go in a special order
-            for (var r of region_order) {
-                html += '<button class="region-button rw-ui rw-text" name="region" value="' + r + '">' + regions[r].toUpperCase() + '</button><br />'
+            for (var i = 0; i < slugcat_icons.length; i++) {
+                html += `
+<label class="difficulty-btn">
+    <input action="map.html" method="get" type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(${i});"
+        autocomplete="off">
+    <img src="./resources/icons/${slugcat_icons[i]}.png">
+</label>`
             }
             document.getElementById('regionlist-vanilla').innerHTML = html;
-            html = "";
-            // modded go alphabetically no repeats
-            for (var r in modded_regions) {
-                if (!(regions[r] == undefined)) continue;
-                html += '<button class="region-button rw-ui rw-text" name="region" value="' + r + '">' + modded_regions[r].toUpperCase() + '</button><br />'
-            }
-            document.getElementById('regionlist-modded').innerHTML = html;
 
-            var updateVisibility = function () {
-                let ckb = document.getElementById('modded-ckb');
-                let moddedRegions = document.getElementById('regionlist-modded');
-                if (ckb.checked) {
-                    moddedRegions.classList.remove("rl-hidden");
-                } else {
-                    moddedRegions.classList.add("rl-hidden")
-                }
-            };
-            document.addEventListener("DOMContentLoaded", updateVisibility);
-            // fuck you, whatever restore mechanism is in play here
-            window.onload = function () {
-                updateVisibility();
-                setTimeout(updateVisibility, 100); // "restoring" a closed tab fires through events and then later... overrides classlists ??
-            };
-            document.getElementById('modded-ckb').onchange = updateVisibility;
+            function selectDifficulty(slugIndex) {
+                var slugs = ["white", "yellow", "red", "gourmand", "artificer", "rivulet", "spear", "saint"];
+                var slugcat_starting_regions = ["SU", "SU", "LF", "SH", "GW", "DS", "SU", "SI"];
+                var slugcat_starting_rooms = ["SU_C04", "SU_C04", "LF_H01", "SH_GOR02", "GW_A24", "DS_RIVSTART", "GATE_OE_SU", "SI_SAINTINTRO"];
+
+                window.location.href = `map.html?slugcat=${slugs[slugIndex]}&region=${slugcat_starting_regions[slugIndex]}&room=${slugcat_starting_rooms[slugIndex]}`;
+            }
         </script>
 
     </form>
-    <div id="main-menu-footer"><a href="https://github.com/henpemaz/">Henpemaz</a> 2023 | <a
-            href="https://github.com/rain-world-map/">GitHub</a> | <a
+    <div id="main-menu-footer">Code on <a href="https://github.com/rain-world-map/">GitHub</a> | <a
+            href="https://github.com/henpemaz/">Henpemaz</a> 2023 | <a
             href="https://store.steampowered.com/app/312520/Rain_World/">Rain World</a> is property of <a
             href="https://twitter.com/VideocultMedia">Videocult</a></div>
 </body>

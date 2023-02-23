@@ -209,20 +209,20 @@
     </div>
 
     <div class="side-panel right-panel rw-text">
-        <div>Difficulty</div>
+        <div>Slugcat</div>
         <form name="difficulty" class="difficulty-select">
             <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(0);" value=0
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('white');" value="white"
                     autocomplete="off">
                 <img src="./resources/icons/17_slugcat.png">
             </label>
             <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(1);" value=1
-                    autocomplete="off">
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('yellow');"
+                    value="yellow" autocomplete="off">
                 <img src="./resources/icons/65_monk.png">
             </label>
             <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(2);" value=2
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('red');" value="red"
                     autocomplete="off">
                 <img src="./resources/icons/64_hunter.png">
             </label>
@@ -379,10 +379,14 @@
                     }
                 }
             }
-            document.difficulty.difficulties[n].checked = true;
+            for (var i = 0; i < document.difficulty.difficulties.length; i++) {
+                if (document.difficulty.difficulties[i].value == n) {
+                    document.difficulty.difficulties[i].checked = true;
+                }
+            }
             if (difficulty != n) {
                 difficulty = n;
-                pushState(true); // no navigation
+                pushState();
             }
         }
 
@@ -491,26 +495,25 @@
         var room;
         function pushState(noNavigation) {
             let changes = false;
-            if (region != params.get("region")) {
-                params.set("region", region);
-                changes = true;
-            }
-            if (modded != (params.get("modded") == 'on' || region_order.indexOf(region) == -1)) {
-                if (modded) params.set("modded", "on");
-                else params.delete("modded");
-                changes = true;
-            }
-            if (difficulty != (params.get("difficulty") ?? 0)) {
-                if (difficulty != 0) params.set("difficulty", difficulty);
-                else params.delete("difficulty");
-                changes = true;
-            }
-            if (room != params.get("room")) {
-                if (room) params.set("room", room);
-                else params.delete("room");
-                changes = true;
-            }
-            if (changes) { // actually changed anything
+            let modded_param = params.get("modded") == 'on' || region_order.indexOf(region) == -1;
+            let difficulty_param = params.get("slugcat");
+            let region_param = params.get("region");
+            let room_param = params.get("room");
+
+            params.delete("modded");
+            params.delete("slugcat");
+            params.delete("region");
+            params.delete("room");
+
+            if (modded)
+                params.set("modded", "on");
+            params.set("slugcat", difficulty);
+            params.set("region", region);
+            if (room)
+                params.set("room", room);
+
+            if (modded != modded_param || difficulty != difficulty_param || region != region_param || room != room_param) {
+                // actually changed anything
                 let newstr = params.toString();
                 if (dynamicNavigation) {
                     window.history.pushState(null, '', window.location.pathname + '?' + newstr);
@@ -522,12 +525,12 @@
             //console.log("newState");
             params = new URLSearchParams(document.location.search);
             region = params.get("region");
-            if (region == null) {
+            difficulty = params.get("slugcat");
+            if (region == null || difficulty == null) {
                 window.location.href = "index.html";
                 return;
             }
             modded = params.get("modded") == 'on' || region_order.indexOf(region) == -1;
-            difficulty = params.get("difficulty") ?? 0;
             room = params.get("room");
             updateRegionList(modded);
             loadRegion(region, modded);
