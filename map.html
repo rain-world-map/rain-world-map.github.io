@@ -106,6 +106,13 @@
 
         .difficulty-select {
             padding-bottom: 6px;
+            width: 200px;
+            position: relative;
+            /* re-center after wrap */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 4px;
+            transition: width 0.4s;
         }
 
         .difficulty-btn {
@@ -226,6 +233,31 @@
                     autocomplete="off">
                 <img src="./resources/icons/64_hunter.png">
             </label>
+            <label class="difficulty-btn">
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('gourmand');"
+                    value="gourmand" autocomplete="off">
+                <img src="./resources/icons/67_gourmand.png">
+            </label>
+            <label class="difficulty-btn">
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('artificer');"
+                    value="artificer" autocomplete="off">
+                <img src="./resources/icons/68_artificer.png">
+            </label>
+            <label class="difficulty-btn">
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('rivulet');"
+                    value="rivulet" autocomplete="off">
+                <img src="./resources/icons/69_rivulet.png">
+            </label>
+            <label class="difficulty-btn">
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('spear');" value="spear"
+                    autocomplete="off">
+                <img src="./resources/icons/70_spear.png">
+            </label>
+            <label class="difficulty-btn">
+                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('saint');" value="saint"
+                    autocomplete="off">
+                <img src="./resources/icons/71_saint.png">
+            </label>
         </form>
 
         <div>Layers</div>
@@ -336,6 +368,9 @@
         var modded_regions = { "AB": "Arid Barrens", "AR": "Aether Ridge", "BL": "Badlands", "CC": "Chimney Canopy", "CG": "Concealed Garden", "DS": "Drainage System", "DW": "Deserted Wastelands", "FB": "Forgotten Boiler", "FI": "Floating Isles", "GW": "Garbage Wastes", "HI": "Industrial Complex", "HW": "Moonlit Acres", "LF": "Farm Arrays", "LW": "Lush Mire", "RW": "Side House", "SB": "Subterranean", "SH": "Shaded Citadel", "SI": "Sky Islands", "SL": "Shoreline", "SS": "Five Pebbles", "SU": "Outskirts", "SW": "Swamplands", "TM": "The Mast", "TR": "The Root", "UB": "Underbelly", "US": "Undersea", "UW": "The Exterior" };
 
         function updateRegionList(checked) {
+            // TODO: un-hardcode slugcats (icon, starting region, starting room, and available regions should be specified as JSON)
+            // TODO: rename tiles directory to "slugcats"
+
             document.getElementById('modded-ckb').checked = checked;
             var html = "";
             // vanilla go in a special order
@@ -384,8 +419,12 @@
                     document.difficulty.difficulties[i].checked = true;
                 }
             }
+            var slugcat_starting_regions = { "white": "SU", "yellow": "SU", "red": "LF", "gourmand": "SH", "artificer": "GW", "rivulet": "DS", "spear": "SU", "saint": "SI" };
+            var slugcat_starting_rooms = { "white": "SU_C04", "yellow": "SU_C04", "red": "LF_H01", "gourmand": "SH_GOR02", "artificer": "GW_A24", "rivulet": "DS_RIVSTART", "spear": "GATE_OE_SU", "saint": "SI_SAINTINTRO" };
             if (difficulty != n) {
                 difficulty = n;
+                region = slugcat_starting_regions[difficulty];
+                room = slugcat_starting_rooms[difficulty];
                 pushState();
             }
         }
@@ -780,9 +819,6 @@
                         let divhtml = "";
                         for (let spawn of feature.properties.spawns) {
                             let spawn_filter = "";
-                            for (let dif of spawn.difficulties) {
-                                spawn_filter += " spawn-filter-" + dif;
-                            }
                             if (spawn.is_lineage) {
                                 // lineages are vertical stacks
                                 divhtml += '<div class="spawn-entry' + spawn_filter + '">'
