@@ -720,18 +720,18 @@
             region = pregion; // chaos
             modded = pmodded;
             console.log("Loading: region {" + region + "} on slugcat {" + difficulty + "}, modded {" + modded + "}");
-            getJsonObject(`slugcats/${difficulty}/${region}/region.json`, function (json) {
+            getJsonObject(`slugcats/${difficulty}/${region.toLowerCase()}/region.json`, function (json) {
                 // Background color
                 map.getContainer().style.backgroundColor = 'rgb(' + json["bgcolor"].join(',') + ')'; // I hate this with passion, but such is the way of the CSS
 
                 // Tileset layer
                 if (tileLayer != null) map.removeLayer(tileLayer);
-                tileLayer = L.tileLayer(`slugcats/${difficulty}/${region}/{z}/{x}_{y}.png`, {
+                tileLayer = L.tileLayer(`slugcats/${difficulty}/${region.toLowerCase()}/{z}/{x}_{y}.png`, {
                     attribution: "<a href=\"https://store.steampowered.com/app/312520/Rain_World/\">Rain World</a> by <a href=\"https://twitter.com/VideocultMedia\">Videocult</a>",
                     minZoom: -7,
                     maxZoom: 3,
                     maxNativeZoom: 0, // important, stop requesting tiles at this point
-                    errorTileUrl: `slugcats/cached/${region}/{z}/{x}_{y}.png`, // files not in the slugcat's folder will probably be in the cache
+                    errorTileUrl: `slugcats/cached/${region.toLowerCase()}/{z}/{x}_{y}.png`, // files not in the slugcat's folder will probably be in the cache
                 }).addTo(map);
 
                 // Room features and name popups
