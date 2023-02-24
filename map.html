@@ -718,7 +718,7 @@
                         slugcat = "cached";
                     }
                     this._url = `slugcats/${slugcat}/${region.toLowerCase()}/{z}/{x}_{y}.png`;
-                    return getTileUrlOrig(coords);
+                    return tileLayer.getTileUrlOrig(coords);
                 };
                 tileLayer.addTo(map);
 
