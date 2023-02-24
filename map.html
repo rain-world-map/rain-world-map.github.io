@@ -390,20 +390,6 @@
         }
 
         function selectDifficulty(n) {
-            // Elements have a combination of these filters
-            // as long as one matches, it should be displayed
-            // parent class hides it, and if one of the sub classes unhides it we're good
-            var sheet = document.getElementById('spawnfilters').sheet;
-            for (var rule of sheet.cssRules) {
-                if (rule.selectorText.startsWith(".spawn-filter-")) {
-                    if (rule.selectorText.endsWith(n)) { // Show
-                        rule.style.display = "initial";
-                    }
-                    else {
-                        rule.style.removeProperty("display"); // unset
-                    }
-                }
-            }
             for (var i = 0; i < document.difficulty.difficulties.length; i++) {
                 if (document.difficulty.difficulties[i].value == n) {
                     document.difficulty.difficulties[i].checked = true;
