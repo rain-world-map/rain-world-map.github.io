@@ -710,7 +710,6 @@
                     maxNativeZoom: 0, // important, stop requesting tiles at this point
                 });
                 var imaged_tiles = json["imaged_tiles"];
-                var getTileUrlOrig = tileLayer.getTileUrl;
                 tileLayer.getTileUrl = function (coords) {
                     // modify url function to get certain tiles from cache instead of given path
                     var slugcat = difficulty; // this._url = difficulty
@@ -718,7 +717,7 @@
                         slugcat = "cached";
                     }
                     this._url = `slugcats/${slugcat}/${region.toLowerCase()}/{z}/{x}_{y}.png`;
-                    return tileLayer.getTileUrlOrig(coords);
+                    return L.TileLayer.getTileUrl.call(tileLayer, coords);
                 };
                 tileLayer.addTo(map);
 
