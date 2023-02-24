@@ -703,13 +703,38 @@
 
                 // Tileset layer
                 if (tileLayer != null) map.removeLayer(tileLayer);
-                tileLayer = L.tileLayer(`slugcats/${difficulty}/${region.toLowerCase()}/{z}/{x}_{y}.png`, {
+                tileLayer = L.tileLayer(difficulty, {
                     attribution: "<a href=\"https://store.steampowered.com/app/312520/Rain_World/\">Rain World</a> by <a href=\"https://twitter.com/VideocultMedia\">Videocult</a>",
                     minZoom: -7,
                     maxZoom: 3,
                     maxNativeZoom: 0, // important, stop requesting tiles at this point
-                    errorTileUrl: `slugcats/cached/${region.toLowerCase()}/{z}/{x}_{y}.png`, // files not in the slugcat's folder will probably be in the cache
-                }).addTo(map);
+                });
+                var imaged_tiles = json["imaged_tiles"];
+                tileLayer.getTileUrl = function (coords) {
+                    // modify url function to get certain tiles from cache instead of given path
+                    // -- START: COPIED FROM LEAFLET --
+                    const data = {
+                        r: Browser.retina ? '@2x' : '',
+                        s: this._getSubdomain(coords),
+                        x: coords.x,
+                        y: coords.y,
+                        z: this._getZoomForUrl()
+                    };
+                    if (this._map && !this._map.options.crs.infinite) {
+                        const invertedY = this._globalTileRange.max.y - coords.y;
+                        if (this.options.tms) {
+                            data['y'] = invertedY;
+                        }
+                        data['-y'] = invertedY;
+                    }
+                    // -- END: COPIED FROM LEAFLET --
+                    var slugcat = this._url; // this._url = difficulty
+                    if (!imaged_tiles.includes([coords.x, coords.y, this._getZoomForUrl()])) {
+                        slugcat = "cached";
+                    }
+                    return Util.template(`slugcats/${slugcat}/${region.toLowerCase()}/{z}/{x}_{y}.png`, Util.extend(data, this.options));
+                };
+                tileLayer.addTo(map);
 
                 // Room features and name popups
                 let hadNames = map.hasLayer(roomNames) || loadedRegion == null;
