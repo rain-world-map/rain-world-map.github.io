@@ -370,7 +370,7 @@
         var room;
         function pushState(noNavigation) {
             let changes = false;
-            let modded_param = params.get("modded") == 'on' || region_order.indexOf(region) == -1;
+            let modded_param = params.get("modded") == 'on';
             let difficulty_param = params.get("slugcat");
             let region_param = params.get("region");
             let room_param = params.get("room");
@@ -380,8 +380,8 @@
             params.delete("region");
             params.delete("room");
 
-            //if (modded)
-            //params.set("modded", "on");
+            if (modded)
+                params.set("modded", "on");
             params.set("slugcat", difficulty);
             params.set("region", region);
             if (room)
