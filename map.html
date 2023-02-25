@@ -352,6 +352,37 @@
             "Jetfish": "58_jetfish",
             "Leviathan": "59_leviathan",
             "randomitems": "60_randomitems_inactive",
+            // MSC. excluded: SlugNPC (no predefined den), Stowaway (no icon), HunterDaddy (no icon and no predefined den), ScavengerKing (no den)
+            "Caramel": "73_caramel",
+            "SpitLizard": "73_caramel",
+            "Strawberry": "74_strawberry",
+            "ZoopLizard": "74_strawberry",
+            "Eel": "75_eel",
+            "EelLizard": "75_eel",
+            "Terror": "76_terror",
+            "TerrorLongLegs": "76_terror",
+            "MotherSpider": "77_motherspider",
+            "Mother Spider": "77_motherspider",
+            "MirosVulture": "78_mirosvulture",
+            "Miros Vulture": "78_mirosvulture",
+            "Hellbug": "79_hellbug",
+            "HellBug": "79_hellbug",
+            "Firebug": "79_hellbug",
+            "FireBug": "79_hellbug",
+            "ScavengerElite": "80_scavengerelite",
+            "Scavenger Elite": "80_scavengerelite",
+            "EliteScavenger": "80_scavengerelite",
+            "Elite Scavenger": "80_scavengerelite",
+            "Elite": "80_scavengerelite",
+            "Inspector": "81_inspector",
+            "Yeek": "82_yeek",
+            "BigJelly": "83_bigjelly",
+            "AquaCentipede": "84_aquacenti",
+            "Aquacenti": "84_aquacenti",
+            "AquaCenti": "84_aquacenti",
+            "Aquapede": "84_aquacenti",
+            "JungleLeech": "85_jungleleech",
+            // None
             "NONE": "63_none",
             //## Difficulties
             "survivor": "17_slugcat",
@@ -824,7 +855,7 @@
                                         console.log("missing icon for " + spawn.lineage[i]);
                                     }
                                     divhtml += '<div class="lineage-entry"><img class="icon-image" src="./resources/icons/' + icon + '.png"/>' +
-                                        '<div class="icon-label">' + Number.parseFloat(Number.parseFloat(spawn.lineage_probs[i] * 100).toPrecision(3)) + ' %</div></div>';
+                                        '<div class="icon-label">' + Math.trunc(Number.parseFloat(spawn.lineage_probs[i]) * 100) + '</div></div>';
                                 }
                                 divhtml += '</div>';
                             } else {
