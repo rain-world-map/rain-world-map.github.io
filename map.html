@@ -405,7 +405,7 @@
                 window.location.href = "index.html";
                 return;
             }
-            modded = params.get("modded") == 'on' || region_order.indexOf(region) == -1;
+            modded = params.get("modded") == 'on';
             room = params.get("room");
             updateRegionList(difficulty, modded);
             loadRegion(difficulty, region, modded);
