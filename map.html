@@ -204,11 +204,6 @@
     <div class="side-panel left-panel rw-text">
         <div style="padding-left: 8px; padding-bottom: 8px;">
             <span>Regions</span>
-            <span id="modded-ckb-group">
-                <input type="checkbox" id="modded-ckb" name="modded" class="rw-ui rw-ui-ckb" autocomplete="off"
-                    onclick="updateRegionList(this.checked);" />
-                <label for="modded-ckb" class="rw-text">Modded</label>
-            </span>
         </div>
 
         <form name="regionselect" id="region-select" class="scroll-ish"></form>
@@ -216,202 +211,51 @@
 
     <div class="side-panel right-panel rw-text">
         <div>Slugcat</div>
-        <form name="difficulty" class="difficulty-select">
-            <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('white');" value="white"
-                    autocomplete="off">
-                <img src="./resources/icons/17_slugcat.png">
-            </label>
-            <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('yellow');"
-                    value="yellow" autocomplete="off">
-                <img src="./resources/icons/65_monk.png">
-            </label>
-            <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('red');" value="red"
-                    autocomplete="off">
-                <img src="./resources/icons/64_hunter.png">
-            </label>
-            <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('gourmand');"
-                    value="gourmand" autocomplete="off">
-                <img src="./resources/icons/67_gourmand.png">
-            </label>
-            <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('artificer');"
-                    value="artificer" autocomplete="off">
-                <img src="./resources/icons/68_artificer.png">
-            </label>
-            <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('rivulet');"
-                    value="rivulet" autocomplete="off">
-                <img src="./resources/icons/69_rivulet.png">
-            </label>
-            <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('spear');" value="spear"
-                    autocomplete="off">
-                <img src="./resources/icons/70_spear.png">
-            </label>
-            <label class="difficulty-btn">
-                <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('saint');" value="saint"
-                    autocomplete="off">
-                <img src="./resources/icons/71_saint.png">
-            </label>
+        <form name="difficulty" class="difficulty-select" id="scug-selector">
         </form>
 
         <div>Layers</div>
         <div id="layer-content" class="scroll-ish"></div>
     </div>
 
+    <script type="text/javascript" src="icons.js"></script>
+
     <script>
         'use strict';
         // misc iconography but mostly Spawns
-        var icon_by_name = {
-            "clear": "00_clear",
-            "rock": "01_rock",
-            "spear": "02_spear",
-            "boomstick": "03_explosivespear",
-            "bomb": "04_explosivebomb",
-            "hive": "05_hive",
-            "lantern": "06_lantern",
-            "lure": "07_lureplant",
-            "mushroom": "08_mushroom",
-            "flashbang": "09_flashbomb",
-            "puffball": "10_puffball",
-            "waternut": "11_bubblefruit",
-            "firecrackerplant": "12_firecrackerplant",
-            "bluefruit": "13_bluefruit",
-            "jellyfish": "14_jellyfish",
-            "bubbleweed": "15_bubbleweed",
-            "slimemold": "16_slimemold",
-            "slugcat": "17_slugcat",
-            //## Creatures from the World File
-            "Green": "18_greenlizard",
-            "Pink": "19_pinklizard",
-            "Blue": "20_bluelizard",
-            "White": "21_whitelizard",
-            "Black": "22_molelizard",
-            "Yellow": "23_orangelizard",
-            "Cyan": "24_cyanlizard",
-            "Red": "25_redlizard",
-            "Salamander": "26_salamander",
-            "batfly": "27_batfly",
-            "CicadaA": "28_whitecicada",
-            "CicadaB": "29_darkcicada",
-            "Snail": "30_snailturtle",
-            "Leech": "31_redleech",
-            "Sea Leech": "32_blueleech",
-            "SeaLeech": "32_blueleech",
-            "Mimic": "33_poleplant",
-            "PoleMimic": "33_poleplant",
-            "TentaclePlant": "34_monsterkelp",
-            "Tentacle Plant": "34_monsterkelp",
-            "Tentacle": "34_monsterkelp",
-            "Scavenger": "35_scavenger",
-            "vulturegrub": "36_vulturegrub",
-            "Vulture": "37_vulture",
-            "KingVulture": "38_kingvulture",
-            "King Vulture": "38_kingvulture",
-            "Small Centipede": "39_smallcentipede",
-            "SmallCentipede": "39_smallcentipede",
-            "Centipede": "40_centipede",
-            "Big Centipede": "41_bigcentipede",
-            "Red Centipede": "42_redcentipede",
-            "RedCentipede": "42_redcentipede",
-            "Centiwing": "43_flyingcentipede",
-            "grappleworm": "44_grappleworm",
-            "Tube": "44_grappleworm",
-            "TubeWorm": "44_grappleworm",
-            "Tube Worm": "44_grappleworm",
-            "hazer": "45_hazer",
-            "Lantern Mouse": "46_lanternmouse",
-            "Mouse": "46_lanternmouse",
-            "Spider": "47_spider",
-            "BigSpider": "48_bigspider",
-            "Big Spider": "48_bigspider",
-            "Bigspider": "48_bigspider",
-            "SpitterSpider": "49_spitterspider",
-            "Miros Bird": "50_mirosbird",
-            "Miros": "50_mirosbird",
-            "Bro": "51_brotherlonglegs",
-            "Daddy": "52_daddylonglegs",
-            "Deer": "53_raindeer",
-            "EggBug": "54_bubblebug",
-            "Eggbug": "54_bubblebug",
-            "DropBug": "55_dropwig",
-            "Dropbug": "55_dropwig",
-            "DropWig": "55_dropwig",
-            "Dropwig": "55_dropwig",
-            "BigNeedleWorm": "56_noodlefly",
-            "BigNeedle": "56_noodlefly",
-            "Needle": "56_noodlefly",
-            "SmallNeedleWorm": "57_babynoodlefly",
-            "SmallNeedle": "57_babynoodlefly",
-            "Jet Fish": "58_jetfish",
-            "JetFish": "58_jetfish",
-            "Jetfish": "58_jetfish",
-            "Leviathan": "59_leviathan",
-            "randomitems": "60_randomitems_inactive",
-            // MSC. excluded: SlugNPC (no predefined den), Stowaway (no icon), HunterDaddy (no icon and no predefined den), ScavengerKing (no den)
-            "Caramel": "73_caramel",
-            "SpitLizard": "73_caramel",
-            "Strawberry": "74_strawberry",
-            "ZoopLizard": "74_strawberry",
-            "Eel": "75_eel",
-            "EelLizard": "75_eel",
-            "Terror": "76_terror",
-            "TerrorLongLegs": "76_terror",
-            "MotherSpider": "77_motherspider",
-            "Mother Spider": "77_motherspider",
-            "MirosVulture": "78_mirosvulture",
-            "Miros Vulture": "78_mirosvulture",
-            "Hellbug": "79_hellbug",
-            "HellBug": "79_hellbug",
-            "Firebug": "79_hellbug",
-            "FireBug": "79_hellbug",
-            "ScavengerElite": "80_scavengerelite",
-            "Scavenger Elite": "80_scavengerelite",
-            "EliteScavenger": "80_scavengerelite",
-            "Elite Scavenger": "80_scavengerelite",
-            "Elite": "80_scavengerelite",
-            "Inspector": "81_inspector",
-            "Yeek": "82_yeek",
-            "BigJelly": "83_bigjelly",
-            "AquaCentipede": "84_aquacenti",
-            "Aquacenti": "84_aquacenti",
-            "AquaCenti": "84_aquacenti",
-            "Aquapede": "84_aquacenti",
-            "JungleLeech": "85_jungleleech",
-            // None
-            "NONE": "63_none",
-            //## Difficulties
-            "survivor": "17_slugcat",
-            "hunter": "64_hunter",
-            "monk": "65_monk",
-            //## Missing stuff
-            //"Garbage Worm": "00_clear",
+
+        var slugcats = {};
+        var region_order = [];
+        var regions = {};
+
+        getJsonObject("slugcats/slugcats.json", function (json) { slugcats = json; }, false);
+
+        var html = "";
+        for (const slugcatName in slugcats) {
+            var icon = "72_unknown";
+            if (slugcatName in icon_by_name) {
+                icon = icon_by_name[slugcatName];
+            } else {
+                console.log("missing icon for " + slugcatName);
+            }
+            html += `
+<label class="difficulty-btn">
+    <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('${slugcatName}');" value="${slugcatName}" autocomplete="off">
+    <img src="./resources/icons/${icon}.png">
+</label>`;
+            document.getElementById('scug-selector').innerHTML = html;
         }
 
-        var region_order = ['SU', 'HI', 'DS', 'CC', 'GW', 'SH', 'SL', 'SI', 'LF', 'UW', 'SS', 'SB'];
-        // dumped region dicts from running the generateGeoJSON scripts
-        var regions = { "CC": "Chimney Canopy", "DS": "Drainage System", "GW": "Garbage Wastes", "HI": "Industrial Complex", "LF": "Farm Arrays", "SB": "Subterranean", "SH": "Shaded Citadel", "SI": "Sky Islands", "SL": "Shoreline", "SS": "Five Pebbles", "SU": "Outskirts", "UW": "The Exterior" };
-        var modded_regions = { "AB": "Arid Barrens", "AR": "Aether Ridge", "BL": "Badlands", "CC": "Chimney Canopy", "CG": "Concealed Garden", "DS": "Drainage System", "DW": "Deserted Wastelands", "FB": "Forgotten Boiler", "FI": "Floating Isles", "GW": "Garbage Wastes", "HI": "Industrial Complex", "HW": "Moonlit Acres", "LF": "Farm Arrays", "LW": "Lush Mire", "RW": "Side House", "SB": "Subterranean", "SH": "Shaded Citadel", "SI": "Sky Islands", "SL": "Shoreline", "SS": "Five Pebbles", "SU": "Outskirts", "SW": "Swamplands", "TM": "The Mast", "TR": "The Root", "UB": "Underbelly", "US": "Undersea", "UW": "The Exterior" };
+        function updateRegionList(difficulty, modded) {
+            regions = slugcats[difficulty].regions;
+            region_order = [];
+            for (const key in regions) {
+                region_order.push(key);
+            }
 
-        function updateRegionList(checked) {
-            // TODO: un-hardcode slugcats (icon, starting region, starting room, and available regions should be specified as JSON)
-
-            document.getElementById('modded-ckb').checked = checked;
             var html = "";
-            // vanilla go in a special order
             for (var r of region_order) {
                 html += '<label><div class="region-btn"><input type="radio" class="rw-ui" name="regions" onclick="selectRegion(this.value);" value="' + r + '"' + (r == region ? ' checked="checked"' : '') + ' autocomplete="off"><span>' + regions[r].toUpperCase() + '</span></div></label>'
-            }
-            if (checked) {
-                // modded go alphabetically no repeats
-                for (var r in modded_regions) {
-                    if (!(regions[r] == undefined)) continue;
-                    html += '<label><div class="region-btn"><input type="radio" class="rw-ui" name="regions" onclick="selectRegion(this.value);" value="' + r + '"' + (r == region ? ' checked="checked"' : '') + ' autocomplete="off"><span>' + modded_regions[r].toUpperCase() + '</span></div></label>'
-                }
             }
             document.getElementById('region-select').innerHTML = html;
         }
@@ -434,12 +278,10 @@
                     document.difficulty.difficulties[i].checked = true;
                 }
             }
-            var slugcat_starting_regions = { "white": "SU", "yellow": "SU", "red": "LF", "gourmand": "SH", "artificer": "GW", "rivulet": "DS", "spear": "SU", "saint": "SI" };
-            var slugcat_starting_rooms = { "white": "SU_C04", "yellow": "SU_C04", "red": "LF_H01", "gourmand": "SH_GOR02", "artificer": "GW_A24", "rivulet": "DS_RIVSTART", "spear": "GATE_OE_SU", "saint": "SI_SAINTINTRO" };
             if (difficulty != n) {
                 difficulty = n;
-                region = slugcat_starting_regions[difficulty];
-                room = slugcat_starting_rooms[difficulty];
+                region = slugcats[difficulty].startingRegion;
+                room = slugcat_starting_rooms[difficulty].startingRoom;
                 pushState();
             }
         }
@@ -586,7 +428,7 @@
             }
             modded = params.get("modded") == 'on' || region_order.indexOf(region) == -1;
             room = params.get("room");
-            updateRegionList(modded);
+            updateRegionList(difficulty, modded);
             loadRegion(difficulty, region, modded);
             selectDifficulty(difficulty);
             let foundRoom = false;

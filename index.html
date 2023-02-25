@@ -55,7 +55,7 @@
         }
 
         /* expando list, flex that needs wrap on really small displays */
-        #regionlist-group {
+        #scuglist-group {
             margin-left: auto;
             margin-right: auto;
             margin-top: 0.8em;
@@ -67,7 +67,7 @@
             flex-wrap: wrap;
         }
 
-        #regionlist-group>div {
+        #scuglist-group>div {
             width: 200px;
             position: relative;
             /* re-center after wrap */
@@ -86,23 +86,23 @@
         }
 
         /* fancy ass animations for stuff poping in */
-        #regionlist-modded {
+        #scuglist-modded {
             display: block;
             transition: opacity 0.2s, width 0.4s;
         }
 
-        #regionlist-modded.rl-hidden {
+        #scuglist-modded.rl-hidden {
             opacity: 0;
             width: 0;
             height: 0;
         }
 
-        #regionlist-modded>.rw-ui {
+        #scuglist-modded>.rw-ui {
             transition: width 0.4s, margin 0.4s, padding 0.4s;
             white-space: nowrap;
         }
 
-        #regionlist-modded.rl-hidden>.rw-ui {
+        #scuglist-modded.rl-hidden>.rw-ui {
             transition: width 0.4s, margin 0.4s, padding 0.4s;
             width: 0px;
             margin-left: 0;
@@ -140,29 +140,34 @@
     <form id="main-menu">
         <div class="rw-title">Rain World</div>
         <div class="rw-bigtext" style="text-align: center; margin-top:0.5em;">I'm lost as...</div>
-        <div id="regionlist-group">
-            <div id="regionlist-vanilla"></div>
+        <div id="scuglist-group">
+            <div id="scuglist-vanilla"></div>
         </div>
+        <script type="text/javascript" src="icons.js"></script>
         <script>
-            var slugcat_icons = ["17_slugcat", "65_monk", "64_hunter", "67_gourmand", "68_artificer", "69_rivulet", "70_spear", "71_saint"];
-            var html = "";
-            // vanilla go in a special order
-            for (var i = 0; i < slugcat_icons.length; i++) {
-                html += `
+            let slugcats = {};
+
+            getJsonObject("slugcats/slugcats.json", function (json) {
+                slugcats = json;
+                var html = "";
+                for (const slugcatName in slugcats) {
+                    var icon = "72_unknown";
+                    if (slugcatName in icon_by_name) {
+                        icon = icon_by_name[slugcatName];
+                    } else {
+                        console.log("missing icon for " + slugcatName);
+                    }
+                    html += `
 <label class="difficulty-btn">
-    <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty(${i});"
-        autocomplete="off">
-    <img src="./resources/icons/${slugcat_icons[i]}.png">
-</label>`
-            }
-            document.getElementById('regionlist-vanilla').innerHTML = html;
+    <input type="radio" class="rw-ui" name="difficulties" onclick="selectDifficulty('${slugcatName}');" autocomplete="off">
+    <img src="./resources/icons/${icon}.png">
+</label>`;
+                    document.getElementById('scuglist-vanilla').innerHTML = html;
+                }
+            }, true);
 
-            function selectDifficulty(slugIndex) {
-                var slugs = ["white", "yellow", "red", "gourmand", "artificer", "rivulet", "spear", "saint"];
-                var slugcat_starting_regions = ["SU", "SU", "LF", "SH", "GW", "DS", "SU", "SI"];
-                var slugcat_starting_rooms = ["SU_C04", "SU_C04", "LF_H01", "SH_GOR02", "GW_A24", "DS_RIVSTART", "GATE_OE_SU", "SI_SAINTINTRO"];
-
-                window.location.href = `map.html?slugcat=${slugs[slugIndex]}&region=${slugcat_starting_regions[slugIndex]}&room=${slugcat_starting_rooms[slugIndex]}`;
+            function selectDifficulty(slugName) {
+                window.location.href = `map.html?slugcat=${slugName}&region=${slugcats[slugName].startingRegion}&room=${slugcats[slugName].startingRoom}`;
             }
         </script>
 

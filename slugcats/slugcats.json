@@ -1,0 +1,23 @@
+{
+    "white": {
+        "startingRegion": "SU",
+        "startingRoom": "SU_C04",
+        "regions": {
+            "SU": "Outskirts",
+            "HI": "Industrial Complex",
+            "DS": "Drainage System",
+            "CC": "Chimney Canopy",
+            "GW": "Garbage Wastes",
+            "SH": "Shaded Citadel",
+            "VS": "Pipeyard",
+            "SL": "Shoreline",
+            "SI": "Sky Islands",
+            "LF": "Farm Arrays",
+            "UW": "The Exterior",
+            "SS": "Five Pebbles",
+            "SB": "Subterranean",
+            "OE": "Outer Expanse",
+            "MS": "Submerged Superstructure"
+        }
+    }
+}
