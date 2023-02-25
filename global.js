@@ -129,6 +129,9 @@ const icon_by_name = {
     //"Garbage Worm": "00_clear",
 }
 
+var requestLock = {};
+var lastRequest = null;
+
 function getJsonObject(url, cb, async = true) {
     if (lastRequest != null) lastRequest.abort();
     let request = new XMLHttpRequest();
