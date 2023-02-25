@@ -829,10 +829,10 @@
                                 divhtml += '</div>';
                             } else {
                                 var icon = "72_unknown";
-                                if (spawn.lineage[i] in icon_by_name) {
-                                    icon = icon_by_name[spawn.lineage[i]];
+                                if (spawn.creature in icon_by_name) {
+                                    icon = icon_by_name[spawn.creature];
                                 } else {
-                                    console.log("missing icon for " + spawn.lineage[i]);
+                                    console.log("missing icon for " + spawn.creature);
                                 }
                                 divhtml += '<div class="spawn-entry' + spawn_filter + '"><img class="icon-image" src="./resources/icons/' + icon + '.png"/>' +
                                     '<div class="icon-label">x' + spawn.amount + '</div></div>';
