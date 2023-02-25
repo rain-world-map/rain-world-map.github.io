@@ -181,6 +181,14 @@
 
     </style>
 
+
+    <style id="spawnfilters">
+        .spawn-filter {
+            display: initial
+        }
+
+    </style>
+
     <style id="hoverlabels">
         .hover-label {
             display: none;
@@ -804,10 +812,10 @@
                         // Spawns are organized by dens, dens list spawns in it, flexbox stacks them visually on the den location, filter classes control visib
                         let divhtml = "";
                         for (let spawn of feature.properties.spawns) {
-                            let spawn_filter = "";
+                            let spawn_filter = " spawn-filter";
                             if (spawn.is_lineage) {
                                 // lineages are vertical stacks
-                                divhtml += '<div class="spawn-entry' + spawn_filter + '">'
+                                divhtml += '<div class="spawn-entry ' + spawn_filter + '">';
                                 for (let i = 0; i < spawn.lineage.length; i++) {
                                     if (!(spawn.lineage[i] in icon_by_name)) {
                                         console.log("missing icon for " + spawn.lineage[i]);
