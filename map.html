@@ -401,7 +401,7 @@
             params = new URLSearchParams(document.location.search);
             region = params.get("region");
             difficulty = params.get("slugcat");
-            if (region == null || difficulty == null || difficulty == "cached") {
+            if (region == null || difficulty == null) {
                 window.location.href = "index.html";
                 return;
             }
@@ -550,35 +550,27 @@
         var connectionsLayer;
         var geometryLayer;
         var densLayer;
+        var loadedDifficulty = null;
         var loadedRegion = null;
         var loadedModded = {};
-        function loadRegion(difficulty, pregion, pmodded) {
-            if (loadedRegion == pregion && loadedModded == pmodded) return;
+        function loadRegion(pdifficulty, pregion, pmodded) {
+            if (loadedDifficulty == pdifficulty && loadedRegion == pregion && loadedModded == pmodded)
+                return;
             region = pregion; // chaos
             modded = pmodded;
-            console.log("Loading: region {" + region + "} on slugcat {" + difficulty + "}, modded {" + modded + "}");
-            getJsonObject(`slugcats/${difficulty}/${region.toLowerCase()}/region.json`, function (json) {
+            console.log("Loading: region {" + region + "} on slugcat {" + pdifficulty + "}, modded {" + modded + "}");
+            getJsonObject(`slugcats/${pdifficulty}/${region.toLowerCase()}/region.json`, function (json) {
                 // Background color
                 map.getContainer().style.backgroundColor = 'rgb(' + json["bgcolor"].join(',') + ')'; // I hate this with passion, but such is the way of the CSS
 
                 // Tileset layer
                 if (tileLayer != null) map.removeLayer(tileLayer);
-                tileLayer = L.tileLayer(difficulty, {
+                tileLayer = L.tileLayer(`slugcats/${pdifficulty}/${region.toLowerCase()}/{z}/{x}_{y}.png`, {
                     attribution: "<a href=\"https://store.steampowered.com/app/312520/Rain_World/\">Rain World</a> by <a href=\"https://twitter.com/VideocultMedia\">Videocult</a>",
                     minZoom: -7,
                     maxZoom: 3,
                     maxNativeZoom: 0, // important, stop requesting tiles at this point
                 });
-                var imaged_tiles = json["imaged_tiles"];
-                tileLayer.getTileUrl = function (coords) {
-                    // modify url function to get certain tiles from cache instead of given path
-                    var slugcat = difficulty; // this._url = difficulty
-                    if (!imaged_tiles.includes([coords.x, coords.y, this._getZoomForUrl()])) {
-                        slugcat = "cached";
-                    }
-                    this._url = `slugcats/${slugcat}/${region.toLowerCase()}/{z}/{x}_{y}.png`;
-                    return L.TileLayer.prototype.getTileUrl.call(tileLayer, coords);
-                };
                 tileLayer.addTo(map);
 
                 // Room features and name popups
@@ -723,6 +715,7 @@
                     map.setView([0, 0], -5);
                 }
 
+                loadedDifficulty = pdifficulty;
                 loadedRegion = pregion;
                 loadedModded = pmodded;
             }, true);
