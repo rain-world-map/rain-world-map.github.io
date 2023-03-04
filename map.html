@@ -408,24 +408,8 @@
             modded = params.get("modded") == 'on';
             room = params.get("room");
             updateRegionList(difficulty, modded);
-            loadRegion(difficulty, region, modded, room);
+            loadRegion(difficulty, region, modded);
             selectDifficulty(difficulty);
-            let foundRoom = false;
-            if (room != null && roomsLayer != null) {
-                for (let l of roomsLayer.getLayers()) {
-                    if (l.feature.properties.name == room) {
-                        //map.fitBounds(l.getBounds());
-                        focusRoom(l);
-                        foundRoom = true;
-                        break;
-                    }
-                }
-            }
-            if (!foundRoom) {
-                console.log("newState err");
-                resetFocus();
-                map.setView([0, 0], -5);
-            }
         }
 
         window.onpopstate = newState;
@@ -554,9 +538,27 @@
         var loadedDifficulty = null;
         var loadedRegion = null;
         var loadedModded = {};
-        function loadRegion(pdifficulty, pregion, pmodded, proom) {
-            if (loadedDifficulty == pdifficulty && loadedRegion == pregion && loadedModded == pmodded)
+        function loadRegion(pdifficulty, pregion, pmodded) {
+            if (loadedDifficulty == pdifficulty && loadedRegion == pregion && loadedModded == pmodded) {
+                // Region isn't changing, double-check focused room
+                let foundRoom = false;
+                if (room != null && roomsLayer != null) {
+                    for (let l of roomsLayer.getLayers()) {
+                        if (l.feature.properties.name == room) {
+                            //map.fitBounds(l.getBounds());
+                            focusRoom(l);
+                            foundRoom = true;
+                            break;
+                        }
+                    }
+                }
+                if (!foundRoom) {
+                    console.log("newState err");
+                    resetFocus();
+                    map.setView([0, 0], -5);
+                }
                 return;
+            }
             region = pregion; // chaos
             modded = pmodded;
             console.log("Loading: region {" + region + "} on slugcat {" + pdifficulty + "}, modded {" + modded + "}");
@@ -717,9 +719,9 @@
 
                 // Zoom to room on rooms loaded
                 let foundRoom = false;
-                if (proom != null && roomsLayer != null) {
+                if (room != null && roomsLayer != null) {
                     for (let l of roomsLayer.getLayers()) {
-                        if (l.feature.properties.name == proom) {
+                        if (l.feature.properties.name == room) {
                             //map.fitBounds(l.getBounds());
                             focusRoom(l);
                             foundRoom = true;
