@@ -408,7 +408,7 @@
             modded = params.get("modded") == 'on';
             room = params.get("room");
             updateRegionList(difficulty, modded);
-            loadRegion(difficulty, region, modded);
+            loadRegion(difficulty, region, modded, room);
             selectDifficulty(difficulty);
             let foundRoom = false;
             if (room != null && roomsLayer != null) {
@@ -554,7 +554,7 @@
         var loadedDifficulty = null;
         var loadedRegion = null;
         var loadedModded = {};
-        function loadRegion(pdifficulty, pregion, pmodded) {
+        function loadRegion(pdifficulty, pregion, pmodded, proom) {
             if (loadedDifficulty == pdifficulty && loadedRegion == pregion && loadedModded == pmodded)
                 return;
             region = pregion; // chaos
@@ -717,9 +717,9 @@
 
                 // Zoom to room on rooms loaded
                 let foundRoom = false;
-                if (room != null && roomsLayer != null) {
+                if (proom != null && roomsLayer != null) {
                     for (let l of roomsLayer.getLayers()) {
-                        if (l.feature.properties.name == room) {
+                        if (l.feature.properties.name == proom) {
                             //map.fitBounds(l.getBounds());
                             focusRoom(l);
                             foundRoom = true;
