@@ -559,13 +559,33 @@
             region = pregion; // chaos
             modded = pmodded;
             console.log("Loading: region {" + region + "} on slugcat {" + pdifficulty + "}, modded {" + modded + "}");
-            getJsonObject(`slugcats/${pdifficulty}/${region.toLowerCase()}/region.json`, function (json) {
+            var slugcat_url = {
+                "artificer": "https://raw.githubusercontent.com/rain-world-map/msc/main/artificer",
+                "gourmand": "https://raw.githubusercontent.com/rain-world-map/msc/main/gourmand",
+                "rivulet": "https://raw.githubusercontent.com/rain-world-map/msc/main/rivulet",
+                "saint": "https://raw.githubusercontent.com/rain-world-map/msc/main/saint",
+                "spear": "https://raw.githubusercontent.com/rain-world-map/msc/main/spear",
+                "white": "https://raw.githubusercontent.com/rain-world-map/vanilla/main/spear",
+                "yellow": "https://raw.githubusercontent.com/rain-world-map/vanilla/main/spear",
+                "red": "https://raw.githubusercontent.com/rain-world-map/vanilla/main/spear",
+            };
+            var region_url = region.toLowerCase();
+            var roompath = `${slugcat_url[pdifficulty]}/${region_url}`;
+            getJsonObject(`${roompath}/region.json`, function (json) {
+                var roomjson = json;
+                if ('copyingrooms' in json) {
+                    getJsonObject(`${slugcat_url[json['copyingrooms']]}/${region_url}/region.json`, function (copyjson) {
+                        roomjson = copyjson;
+                        roompath = `${slugcat_url[json['copyingrooms']]}/${region_url}`;
+                    }, false);
+                }
+
                 // Background color
                 map.getContainer().style.backgroundColor = 'rgb(' + json["bgcolor"].join(',') + ')'; // I hate this with passion, but such is the way of the CSS
 
                 // Tileset layer
                 if (tileLayer != null) map.removeLayer(tileLayer);
-                tileLayer = L.tileLayer(`slugcats/${pdifficulty}/${region.toLowerCase()}/{z}/{x}_{y}.png`, {
+                tileLayer = L.tileLayer(`${roompath}/{z}/{x}_{y}.png`, {
                     attribution: "<a href=\"https://store.steampowered.com/app/312520/Rain_World/\">Rain World</a> by <a href=\"https://twitter.com/VideocultMedia\">Videocult</a>",
                     minZoom: -7,
                     maxZoom: 3,
@@ -585,7 +605,7 @@
                     map.removeLayer(roomsLayer);
                 }
                 roomNames = L.layerGroup();
-                roomsLayer = L.geoJSON(json["room_features"], {
+                roomsLayer = L.geoJSON(roomjson["room_features"], {
                     style: {
                         weight: 0,
                         color: 'rgb(' + json["highlightcolor"].join(',') + ')',
@@ -619,7 +639,7 @@
                     overlays.removeLayer(connectionsLayer);
                     map.removeLayer(connectionsLayer);
                 }
-                connectionsLayer = new L.BezierGeoJSON(json["connection_features"], {
+                connectionsLayer = new L.BezierGeoJSON(roomjson["connection_features"], {
                     color: 'rgba(' + json["shortcutcolor"].join(',') + ',0.72)', // so the white looks better
                     weight: 2,
                     lineCap: "butt", // hehe
@@ -635,7 +655,7 @@
                     overlays.removeLayer(geometryLayer);
                     map.removeLayer(geometryLayer);
                 }
-                geometryLayer = L.geoJSON(json["geo_features"], {
+                geometryLayer = L.geoJSON(roomjson["geo_features"], {
                     interactive: false,
                     color: 'rgb(' + json["geocolor"].join(',') + ')',
                     weight: 2,
