@@ -422,6 +422,7 @@
                 }
             }
             if (!foundRoom) {
+                console.log("newState err");
                 resetFocus();
                 map.setView([0, 0], -5);
             }
@@ -731,6 +732,7 @@
                         room = null;
                         pushState();
                     }
+                    console.log("regionLoad err");
                     resetFocus();
                     map.setView([0, 0], -5);
                 }
