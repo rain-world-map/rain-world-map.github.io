@@ -732,7 +732,7 @@
                         room = null;
                         pushState();
                     }
-                    console.log("regionLoad err");
+                    console.log(`regionLoad err coming from ${loadedDifficulty} to ${pdifficulty}, layers len = ${roomsLayer.getLayers().length}`);
                     resetFocus();
                     map.setView([0, 0], -5);
                 }
