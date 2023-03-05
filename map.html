@@ -79,7 +79,8 @@
 
         .icon-tooltip {
             position: absolute;
-            margin-top: -16px;
+            margin-top: -10px;
+            margin-top: -22px;
             font-weight: 900;
             font-size: 150%;
             color: white;
@@ -708,9 +709,9 @@
                                         console.log("missing icon for " + spawn.lineage[i]);
                                     }
                                     divhtml += `<div class="lineage-entry">
-                                        <div class="icon-tooltip">${tooltip}</div>
                                         <img class="icon-image" src="./resources/icons/${icon}.png"/>
                                         <div class="icon-label">${Math.trunc(Number.parseFloat(spawn.lineage_probs[i]) * 100)}</div>
+                                        <div class="icon-tooltip">${tooltip}</div>
                                         </div>`;
                                 }
                                 divhtml += '</div>';
@@ -729,9 +730,9 @@
                                     console.log("missing icon for " + spawn.creature);
                                 }
                                 divhtml += `<div class="spawn-entry${spawn_filter}">
-                                    <div class="icon-tooltip">${tooltip}</div>
                                     <img class="icon-image" src="./resources/icons/${icon}.png"/>
                                     <div class="icon-label">x${spawn.amount}</div>
+                                    <div class="icon-tooltip">${tooltip}</div>
                                     </div>`;
                             }
                         }
