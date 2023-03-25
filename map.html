@@ -168,7 +168,7 @@
 
         .region-btn {
             font-size: 0.8rem;
-            width: 200px;
+            width: 230px;
             height: 24px;
             position: relative;
             margin-top: 8px;
@@ -270,7 +270,7 @@
 <label>
     <div class="region-btn">
         <input type="radio" class="rw-ui" name="regions" onclick="selectRegion(this.value);" value="${r}"${r == region ? ' checked="checked"' : ''} autocomplete = "off">
-        <span>${regions[r].toUpperCase()}</span>
+        <span>${regions[r].toUpperCase()} (${r})</span>
     </div>
 </label>`
             }
